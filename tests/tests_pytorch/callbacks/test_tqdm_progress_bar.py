@@ -147,7 +147,11 @@ def test_tqdm_progress_bar_totals(tmpdir, num_dl):
     # check the sanity dataloaders
     num_sanity_val_steps = 4
     trainer = Trainer(
-        default_root_dir=tmpdir, max_epochs=1, limit_train_batches=0, num_sanity_val_steps=num_sanity_val_steps
+        accelerator="auto",
+        default_root_dir=tmpdir,
+        max_epochs=1,
+        limit_train_batches=0,
+        num_sanity_val_steps=num_sanity_val_steps,
     )
     pbar = trainer.progress_bar_callback
     with mock.patch("pytorch_lightning.callbacks.progress.tqdm_progress.Tqdm", MockTqdm):
@@ -264,6 +268,7 @@ def test_tqdm_progress_bar_progress_refresh(tmpdir, refresh_rate: int):
 
     pbar = CurrentProgressBar(refresh_rate=refresh_rate)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         callbacks=[pbar],
         limit_train_batches=1.0,
@@ -315,6 +320,7 @@ def test_num_sanity_val_steps_progress_bar(tmpdir, limit_val_batches: int):
     num_sanity_val_steps = 2
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         num_sanity_val_steps=num_sanity_val_steps,
@@ -372,6 +378,7 @@ def test_main_progress_bar_update_amount(
     model = BoringModel()
     progress_bar = TQDMProgressBar(refresh_rate=refresh_rate)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_train_batches=train_batches,
@@ -394,6 +401,7 @@ def test_test_progress_bar_update_amount(tmpdir, test_batches: int, refresh_rate
     model = BoringModel()
     progress_bar = TQDMProgressBar(refresh_rate=refresh_rate)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_test_batches=test_batches,
@@ -731,6 +739,7 @@ def test_tqdm_progress_bar_disabled_when_not_rank_zero(is_global_zero):
     pbar = TQDMProgressBar()
     model = BoringModel()
     trainer = Trainer(
+        accelerator="auto",
         callbacks=[pbar],
         fast_dev_run=True,
     )

@@ -300,7 +300,7 @@ def test_single_gpu_batch_parse():
 @RunIf(min_cuda_gpus=1)
 def test_non_blocking():
     """Tests that non_blocking=True only gets passed on torch.Tensor.to, but not on other objects."""
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
 
     batch = torch.zeros(2, 3)
     with patch.object(batch, "to", wraps=batch.to) as mocked:

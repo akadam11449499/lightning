@@ -36,15 +36,13 @@ from tests_pytorch.helpers.simple_models import RegressionModel
 @RunIf(quantization=True)
 def test_quantization(tmpdir, observe: str, fuse: bool, convert: bool):
     """Parity test for quant model."""
-    cuda_available = GPUAccelerator.is_available()
 
     if observe == "average" and not fuse and GPUAccelerator.is_available():
         pytest.xfail("TODO: flakiness in GPU CI")
 
     seed_everything(42)
     dm = RegressDataModule()
-    accelerator = "gpu" if cuda_available else "cpu"
-    trainer_args = dict(default_root_dir=tmpdir, max_epochs=7, accelerator=accelerator, devices=1)
+    trainer_args = dict(default_root_dir=tmpdir, max_epochs=7, accelerator="auto", devices=1)
     model = RegressionModel()
     qmodel = copy.deepcopy(model)
 
@@ -162,7 +160,12 @@ def test_quantization_triggers(tmpdir, trigger_fn: Union[None, int, Callable], e
     qmodel = RegressionModel()
     qcb = QuantizationAwareTraining(collect_quantization=trigger_fn)
     trainer = Trainer(
-        callbacks=[qcb], default_root_dir=tmpdir, limit_train_batches=1, limit_val_batches=1, max_epochs=4
+        accelerator="auto",
+        callbacks=[qcb],
+        default_root_dir=tmpdir,
+        limit_train_batches=1,
+        limit_val_batches=1,
+        max_epochs=4,
     )
     trainer.fit(qmodel, datamodule=dm)
 
@@ -224,6 +227,7 @@ def test_quantization_val_test_predict(tmpdir):
 
     val_test_predict_qmodel = copy.deepcopy(qmodel)
     trainer = Trainer(
+        accelerator="auto",
         callbacks=[QuantizationAwareTraining(quantize_on_fit_end=False)],
         default_root_dir=tmpdir,
         limit_train_batches=1,

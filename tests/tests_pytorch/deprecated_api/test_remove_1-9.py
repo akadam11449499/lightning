@@ -145,7 +145,7 @@ def test_old_callback_path():
 
 
 def test_deprecated_dataloader_reset():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     with pytest.deprecated_call(match="reset_train_val_dataloaders` has been deprecated in v1.7"):
         trainer.reset_train_val_dataloaders()
 

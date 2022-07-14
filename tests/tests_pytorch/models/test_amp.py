@@ -179,7 +179,7 @@ def test_amp_without_apex(bwd_mock, tmpdir):
     """Check that even with apex amp type without requesting precision=16 the amp backend is void."""
     model = BoringModel()
 
-    trainer = Trainer(default_root_dir=tmpdir, amp_backend="native")
+    trainer = Trainer(accelerator="auto", default_root_dir=tmpdir, amp_backend="native")
     assert trainer.amp_backend is None
 
     trainer = Trainer(default_root_dir=tmpdir, max_epochs=1, amp_backend="apex")

@@ -48,7 +48,7 @@ def test_restore_checkpoint_after_pre_setup(tmpdir, restore_after_pre_setup):
             return super().load_checkpoint(checkpoint_path)
 
     model = BoringModel()
-    trainer = Trainer(default_root_dir=tmpdir, fast_dev_run=True)
+    trainer = Trainer(default_root_dir=tmpdir, fast_dev_run=True, accelerator="cpu")
     trainer.fit(model)
 
     checkpoint_path = os.path.join(tmpdir, "model.pt")

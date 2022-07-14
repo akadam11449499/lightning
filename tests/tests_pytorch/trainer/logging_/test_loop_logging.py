@@ -34,7 +34,7 @@ def test_default_level_for_hooks_that_support_logging():
                 hook, hook, torch.tensor(1), on_step=on_step, on_epoch=on_epoch, **extra_kwargs
             )
 
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     model = BoringModel()
     model.trainer = trainer
     extra_kwargs = {

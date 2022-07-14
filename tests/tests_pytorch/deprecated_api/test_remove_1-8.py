@@ -144,14 +144,14 @@ def test_v1_8_0_deprecated_on_hpc_hooks(tmpdir):
 
 
 def test_v1_8_0_deprecated_run_stage():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     trainer._run_stage = Mock()
     with pytest.deprecated_call(match="`Trainer.run_stage` is deprecated in v1.6 and will be removed in v1.8."):
         trainer.run_stage()
 
 
 def test_v1_8_0_trainer_verbose_evaluate():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     with pytest.deprecated_call(match="verbose_evaluate` property has been deprecated and will be removed in v1.8"):
         assert trainer.verbose_evaluate
 
@@ -162,7 +162,7 @@ def test_v1_8_0_trainer_verbose_evaluate():
 @pytest.mark.parametrize("fn_prefix", ["validated", "tested", "predicted"])
 def test_v1_8_0_trainer_ckpt_path_attributes(fn_prefix: str):
     test_attr = f"{fn_prefix}_ckpt_path"
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     with pytest.deprecated_call(match=f"{test_attr}` attribute was deprecated in v1.6 and will be removed in v1.8"):
         _ = getattr(trainer, test_attr)
     with pytest.deprecated_call(match=f"{test_attr}` attribute was deprecated in v1.6 and will be removed in v1.8"):
@@ -170,7 +170,7 @@ def test_v1_8_0_trainer_ckpt_path_attributes(fn_prefix: str):
 
 
 def test_v1_8_0_deprecated_trainer_should_rank_save_checkpoint(tmpdir):
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     with pytest.deprecated_call(
         match=r"`Trainer.should_rank_save_checkpoint` is deprecated in v1.6 and will be removed in v1.8."
     ):
@@ -178,13 +178,13 @@ def test_v1_8_0_deprecated_trainer_should_rank_save_checkpoint(tmpdir):
 
 
 def test_v1_8_0_deprecated_lr_scheduler():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     with pytest.deprecated_call(match=r"`Trainer.lr_schedulers` is deprecated in v1.6 and will be removed in v1.8."):
         assert trainer.lr_schedulers == []
 
 
 def test_v1_8_0_trainer_optimizers_mixin():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     model = BoringModel()
     trainer.strategy.connect(model)
     trainer.lightning_module.trainer = trainer
@@ -298,7 +298,7 @@ def test_v1_8_0_deprecate_trainer_callback_hook_mixin():
 
 
 def test_v1_8_0_deprecated_training_type_plugin_property():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     with pytest.deprecated_call(match="in v1.6 and will be removed in v1.8"):
         trainer.training_type_plugin
 
@@ -370,7 +370,7 @@ def test_v1_8_0_deprecated_single_tpu_plugin_class():
 
 
 def test_v1_8_0_deprecated_lightning_optimizers():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     with pytest.deprecated_call(
         match="Trainer.lightning_optimizers` is deprecated in v1.6 and will be removed in v1.8"
     ):
@@ -824,7 +824,7 @@ def test_v1_8_0_datamodule_checkpointhooks():
 
 
 def test_v1_8_0_trainer_use_amp(tmpdir):
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
 
     with pytest.deprecated_call(match="`Trainer.use_amp` is deprecated in v1.6.0"):
         _ = trainer.use_amp
@@ -1057,7 +1057,7 @@ def test_trainer_data_parallel_device_ids(monkeypatch, trainer_kwargs, expected_
 
 def test_deprecated_mc_save_checkpoint():
     mc = ModelCheckpoint()
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     with mock.patch.object(trainer, "save_checkpoint"), pytest.deprecated_call(
         match=r"ModelCheckpoint.save_checkpoint\(\)` was deprecated in v1.6"
     ):

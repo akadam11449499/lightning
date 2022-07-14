@@ -42,6 +42,7 @@ def test__training_step__flow_scalar(tmpdir):
     model.val_dataloader = None
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         limit_train_batches=2,
         limit_val_batches=2,
@@ -81,6 +82,7 @@ def test__training_step__tr_step_end__flow_scalar(tmpdir):
     model.val_dataloader = None
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         limit_train_batches=2,
         limit_val_batches=2,
@@ -126,6 +128,7 @@ def test__training_step__epoch_end__flow_scalar(tmpdir):
     model.val_dataloader = None
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         limit_train_batches=2,
         limit_val_batches=2,
@@ -196,6 +199,7 @@ def test__training_step__step_end__epoch_end__flow_scalar(tmpdir):
     model.val_dataloader = None
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         limit_train_batches=2,
         limit_val_batches=2,
@@ -283,6 +287,7 @@ def test_training_step_no_return_when_even(tmpdir):
 
     model = TestModel()
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         limit_train_batches=4,
         limit_val_batches=1,
@@ -333,6 +338,7 @@ def test_training_step_none_batches(tmpdir):
 
     model = TestModel()
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         limit_val_batches=1,
         max_epochs=4,

@@ -51,7 +51,7 @@ def test_trainer_loggers_setters():
     with pytest.deprecated_call(match="`LoggerCollection` is deprecated in v1.6"):
         logger_collection_2 = LoggerCollection([logger2])
 
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     assert type(trainer.logger) == TensorBoardLogger
     assert trainer.loggers == [trainer.logger]
 

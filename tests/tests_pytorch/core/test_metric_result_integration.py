@@ -649,6 +649,7 @@ def test_compute_not_a_tensor_raises():
 
     model = MyModel()
     trainer = Trainer(
+        accelerator="auto",
         limit_train_batches=1,
         limit_val_batches=0,
         max_epochs=1,

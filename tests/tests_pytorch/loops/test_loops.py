@@ -60,7 +60,9 @@ def test_connect_loops_direct(loop_name):
     with pytest.raises(RuntimeError, match="The loop is not attached to a Trainer"):
         _ = loop.trainer
 
-    trainer = Trainer()
+    trainer = Trainer(
+        accelerator="auto",
+    )
 
     # trainer.loop_name = loop
     setattr(trainer, loop_name, loop)
@@ -80,7 +82,9 @@ def test_connect_loops_recursive():
     with pytest.raises(RuntimeError, match="The loop is not attached to a Trainer"):
         _ = main_loop.child_loop0.trainer
 
-    trainer = Trainer()
+    trainer = Trainer(
+        accelerator="auto",
+    )
     trainer.fit_loop = main_loop
     assert child0.trainer is trainer
     assert child1.trainer is trainer
@@ -106,7 +110,7 @@ def test_restarting_loops_recursive():
 def test_connect_subloops(tmpdir):
     """Test connecting individual subloops by calling `trainer.x.y.connect()`"""
     model = BoringModel()
-    trainer = Trainer(default_root_dir=tmpdir, fast_dev_run=True)
+    trainer = Trainer(accelerator="auto", default_root_dir=tmpdir, fast_dev_run=True)
 
     epoch_loop = trainer.fit_loop.epoch_loop
     new_batch_loop = TrainingBatchLoop()
@@ -125,7 +129,7 @@ def test_replace_loops():
         def __init__(self, foo):
             super().__init__()
 
-    trainer = Trainer(min_steps=123, max_steps=321)
+    trainer = Trainer(accelerator="auto", min_steps=123, max_steps=321)
 
     with pytest.raises(
         MisconfigurationException, match=r"FitLoop.replace\(TestLoop\)`.*`__init__`.*`TrainingEpochLoop`"
@@ -209,7 +213,9 @@ def test_loop_restore():
             self.iteration_count = state_dict["iteration_count"]
             self.outputs = state_dict["outputs"]
 
-    trainer = Trainer()
+    trainer = Trainer(
+        accelerator="auto",
+    )
 
     data = range(10)
     loop = Simple(data)
@@ -268,7 +274,9 @@ def test_loop_hierarchy():
     loop_parent.loop_child = loop_child
 
     # check the trainer reference is propagated
-    loop_parent.trainer = Trainer()
+    loop_parent.trainer = Trainer(
+        accelerator="auto",
+    )
     assert loop_child.trainer is loop_parent.trainer
 
     state_dict = loop_parent.state_dict()
@@ -337,6 +345,7 @@ def test_loop_restart_progress_multiple_dataloaders(tmpdir, n_dataloaders, stop_
     model.validation_epoch_end = None
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=n_epochs,
         limit_train_batches=1,
@@ -418,6 +427,7 @@ def test_loop_state_on_exception(accumulate_grad_batches, stop_epoch, stop_batch
     model.training_epoch_end = None
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=n_epochs,
         limit_train_batches=n_batches,
@@ -620,6 +630,7 @@ def test_loop_state_on_complete_run(n_optimizers, tmpdir):
     model.training_epoch_end = None
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=n_epochs,
         limit_val_batches=0,
@@ -733,6 +744,7 @@ def test_fit_loop_reset(tmpdir):
         save_top_k=-1,
     )
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         limit_train_batches=4,
         max_epochs=2,
@@ -847,6 +859,7 @@ def test_fit_can_fail_during_validation(train_datasets, val_datasets, val_check_
 
     model = TestModel(False)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         val_check_interval=val_check_interval,
@@ -885,6 +898,7 @@ def test_fit_can_fail_during_validation(train_datasets, val_datasets, val_check_
 
     model = TestModel(True)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         val_check_interval=val_check_interval,
@@ -936,6 +950,7 @@ def test_fit_can_fail_during_validation(train_datasets, val_datasets, val_check_
 
     model = TestModel(False)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         val_check_interval=val_check_interval,
@@ -1001,6 +1016,7 @@ def test_workers_are_shutdown(tmpdir, should_fail, persistent_workers):
 
     model = BoringModel()
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         limit_train_batches=2,
         limit_val_batches=2,

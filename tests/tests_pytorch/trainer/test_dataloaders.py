@@ -520,7 +520,7 @@ def test_mixing_of_dataloader_options(tmpdir, ckpt_path):
 def test_warning_on_zero_len_dataloader(tmpdir):
     """Test that a warning is raised if a zero-length dataloader is defined."""
     model = BoringModel()
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     train_dataloader = DataLoader(RandomDataset(32, 0))
     val_dataloader = DataLoader(RandomDataset(32, 0))
     trainer._data_connector.attach_data(model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader)

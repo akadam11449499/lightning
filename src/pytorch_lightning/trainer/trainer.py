@@ -206,7 +206,7 @@ class Trainer(
             amp_backend: The mixed precision backend to use ("native" or "apex").
                 Default: ``'native''``.
 
-            amp_level: The optimization level to use (O1, O2, etc...). By default it will be set to "O2"
+            amp_level: The optimization level to use (O1, O2, etc...). By default, it will be set to "O2"
                 if ``amp_backend`` is set to "apex".
 
             auto_lr_find: If set to True, will make trainer.tune() run a learning rate finder,

@@ -770,7 +770,7 @@ def test_invalid_scheduler_missing_state_dict():
             return {"optimizer": opt, "lr_scheduler": lr_scheduler}
 
     model = CustomBoringModel()
-    model.trainer = Trainer()
+    model.trainer = Trainer(accelerator="auto")
     with pytest.raises(TypeError, match="provided lr scheduler `CustomScheduler` is invalid"):
         _init_optimizers_and_lr_schedulers(model)
 
@@ -799,7 +799,7 @@ def test_invalid_lr_scheduler_with_custom_step_method(override):
             return {"optimizer": opt, "lr_scheduler": lr_scheduler}
 
     model = CustomBoringModel()
-    model.trainer = Trainer()
+    model.trainer = Trainer(accelerator="auto")
     if override:
 
         def lr_scheduler_step(*_):

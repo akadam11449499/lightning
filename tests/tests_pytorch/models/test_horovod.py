@@ -174,10 +174,10 @@ def test_horovod_raises_unsupported_accumulate_grad_batches(tmpdir):
     Strategy on multi-gpus."""
     model = BoringModel()
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         enable_progress_bar=False,
         accumulate_grad_batches={0: 4, 2: 2},
-        accelerator="auto",
         devices=2,
         strategy="horovod",
     )
@@ -294,6 +294,7 @@ def test_horovod_multi_optimizer(tmpdir):
 
     # fit model
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=str(tmpdir),
         enable_progress_bar=False,
         max_epochs=1,
@@ -356,6 +357,7 @@ def test_result_reduce_horovod(tmpdir):
         model.val_dataloader = None
 
         trainer = Trainer(
+            accelerator="auto",
             default_root_dir=tmpdir,
             limit_train_batches=2,
             limit_val_batches=2,
@@ -387,7 +389,7 @@ def test_accuracy_metric_horovod():
     target = torch.randint(high=2, size=(num_batches, batch_size))
 
     def _compute_batch():
-        trainer = Trainer(fast_dev_run=True, strategy="horovod", logger=False)
+        trainer = Trainer(accelerator="auto", fast_dev_run=True, strategy="horovod", logger=False)
 
         assert isinstance(trainer.accelerator, CPUAccelerator)
         # TODO: test that we selected the correct training_type_plugin based on horovod flags
@@ -443,7 +445,12 @@ def test_horovod_multi_optimizer_with_scheduling_stepping(tmpdir):
 
         # fit model
         trainer = Trainer(
-            default_root_dir=tmpdir, max_epochs=1, limit_val_batches=0.5, limit_train_batches=0.2, strategy="horovod"
+            accelerator="auto",
+            default_root_dir=tmpdir,
+            max_epochs=1,
+            limit_val_batches=0.5,
+            limit_train_batches=0.2,
+            strategy="horovod",
         )
         trainer.fit(model)
 

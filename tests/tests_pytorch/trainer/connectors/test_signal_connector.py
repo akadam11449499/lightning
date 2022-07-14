@@ -99,7 +99,7 @@ def test_auto_requeue_flag(auto_requeue):
 
 
 def _registering_signals():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     trainer._signal_connector.register_signal_handlers()
 
 

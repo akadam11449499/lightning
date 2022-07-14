@@ -35,7 +35,7 @@ def test_on_before_zero_grad_called(tmpdir, max_steps):
 
     model = CurrentTestModel()
 
-    trainer = Trainer(default_root_dir=tmpdir, max_steps=max_steps, max_epochs=2)
+    trainer = Trainer(accelerator="auto", default_root_dir=tmpdir, max_steps=max_steps, max_epochs=2)
     assert 0 == model.on_before_zero_grad_called
     trainer.fit(model)
     assert max_steps == model.on_before_zero_grad_called
@@ -63,7 +63,7 @@ def test_training_epoch_end_metrics_collection(tmpdir):
             )
 
     model = CurrentModel()
-    trainer = Trainer(max_epochs=num_epochs, default_root_dir=tmpdir, overfit_batches=2)
+    trainer = Trainer(accelerator="auto", max_epochs=num_epochs, default_root_dir=tmpdir, overfit_batches=2)
     trainer.fit(model)
     assert trainer.state.finished, f"Training failed with {trainer.state}"
     metrics = trainer.progress_bar_callback.get_metrics(trainer, model)
@@ -105,7 +105,7 @@ def test_training_epoch_end_metrics_collection_on_override(tmpdir):
     not_overridden_model = NotOverriddenModel()
     not_overridden_model.training_epoch_end = None
 
-    trainer = Trainer(max_epochs=1, default_root_dir=tmpdir, overfit_batches=2)
+    trainer = Trainer(accelerator="auto", max_epochs=1, default_root_dir=tmpdir, overfit_batches=2)
 
     trainer.fit(overridden_model)
     assert overridden_model.len_outputs == overridden_model.num_train_batches

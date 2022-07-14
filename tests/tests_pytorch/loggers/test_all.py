@@ -129,6 +129,7 @@ def _test_loggers_fit_test(tmpdir, logger_class):
 
     model = CustomModel()
     trainer = Trainer(
+        accelerator="auto",
         max_epochs=1,
         logger=logger,
         limit_train_batches=1,

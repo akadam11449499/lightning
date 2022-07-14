@@ -210,6 +210,7 @@ def test_pruning_lth_callable(tmpdir, resample_parameters: bool):
         "l1_unstructured", use_lottery_ticket_hypothesis=lambda e: bool(e % 2), resample_parameters=resample_parameters
     )
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         enable_progress_bar=False,
         enable_model_summary=False,
@@ -246,6 +247,7 @@ def test_multiple_pruning_callbacks(tmpdir, caplog, make_pruning_permanent: bool
         limit_val_batches=2,
         max_epochs=3,
         callbacks=[p1, p2],
+        accelerator="auto",
     )
     with caplog.at_level(INFO):
         trainer.fit(model)
@@ -307,7 +309,9 @@ def test_permanent_when_model_is_saved_multiple_times(
     ckpt_callback = ModelCheckpoint(
         monitor="test", save_top_k=2, save_last=True, save_on_train_epoch_end=save_on_train_epoch_end
     )
-    trainer = Trainer(callbacks=[pruning_callback, ckpt_callback], max_epochs=3, enable_progress_bar=False)
+    trainer = Trainer(
+        callbacks=[pruning_callback, ckpt_callback], max_epochs=3, enable_progress_bar=False, accelerator="auto"
+    )
     with caplog.at_level(INFO):
         trainer.fit(model)
 

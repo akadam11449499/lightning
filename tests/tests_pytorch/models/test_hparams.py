@@ -625,7 +625,12 @@ def test_init_arg_with_runtime_change(tmpdir, cls):
     assert model.hparams.running_arg == -1
 
     trainer = Trainer(
-        default_root_dir=tmpdir, limit_train_batches=2, limit_val_batches=2, limit_test_batches=2, max_epochs=1
+        accelerator="auto",
+        default_root_dir=tmpdir,
+        limit_train_batches=2,
+        limit_val_batches=2,
+        limit_test_batches=2,
+        max_epochs=1,
     )
     trainer.fit(model)
 
@@ -643,7 +648,12 @@ class UnsafeParamModel(BoringModel):
 def test_model_with_fsspec_as_parameter(tmpdir):
     model = UnsafeParamModel(LocalFileSystem(tmpdir))
     trainer = Trainer(
-        default_root_dir=tmpdir, limit_train_batches=2, limit_val_batches=2, limit_test_batches=2, max_epochs=1
+        accelerator="auto",
+        default_root_dir=tmpdir,
+        limit_train_batches=2,
+        limit_val_batches=2,
+        limit_test_batches=2,
+        max_epochs=1,
     )
     trainer.fit(model)
     trainer.test()
@@ -671,6 +681,7 @@ def test_model_save_hyper_parameters_interpolation_with_hydra(tmpdir):
         epochs = 2
         checkpoint_callback = ModelCheckpoint(monitor=None, dirpath=tmpdir, save_top_k=-1)
         trainer = Trainer(
+            accelerator="auto",
             default_root_dir=tmpdir,
             callbacks=[checkpoint_callback],
             limit_train_batches=10,

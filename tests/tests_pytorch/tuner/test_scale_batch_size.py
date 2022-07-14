@@ -225,6 +225,7 @@ def test_error_on_dataloader_passed_to_fit(tmpdir):
     # only train passed to fit
     model = BatchSizeModel(batch_size=2)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_val_batches=0.1,
@@ -257,7 +258,12 @@ def test_auto_scale_batch_size_with_amp(tmpdir):
 def test_scale_batch_size_no_trials(tmpdir):
     """Check the result is correct even when no trials are run."""
     trainer = Trainer(
-        default_root_dir=tmpdir, max_epochs=1, limit_val_batches=1, limit_train_batches=1, auto_scale_batch_size="power"
+        accelerator="auto",
+        default_root_dir=tmpdir,
+        max_epochs=1,
+        limit_val_batches=1,
+        limit_train_batches=1,
+        auto_scale_batch_size="power",
     )
     model = BatchSizeModel(batch_size=2)
     result = trainer.tuner.scale_batch_size(model, max_trials=0)
@@ -274,6 +280,7 @@ def test_scale_batch_size_fails_with_unavailable_mode(tmpdir):
 
     model = TestModel()
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_val_batches=1,

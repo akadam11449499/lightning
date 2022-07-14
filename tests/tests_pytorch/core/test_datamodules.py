@@ -42,7 +42,7 @@ if _OMEGACONF_AVAILABLE:
 def test_can_prepare_data(local_rank, node_rank):
     dm = Mock(spec=LightningDataModule)
     dm.prepare_data_per_node = True
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     trainer.datamodule = dm
 
     # 1 no DM
@@ -214,6 +214,7 @@ def test_dm_checkpoint_save_and_load(tmpdir):
     model = CustomBoringModel()
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_train_batches=2,
@@ -506,6 +507,7 @@ def test_datamodule_hooks_are_profiled():
 
     def get_trainer():
         trainer = Trainer(
+            accelerator="auto",
             max_steps=1,
             limit_val_batches=0,
             profiler="simple",

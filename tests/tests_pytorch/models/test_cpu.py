@@ -35,6 +35,7 @@ def test_cpu_slurm_save_load(tmpdir):
 
     # fit model
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         logger=logger,
@@ -87,6 +88,7 @@ def test_cpu_slurm_save_load(tmpdir):
             model.train(mode)
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         logger=logger,
@@ -215,6 +217,7 @@ def test_running_test_after_fitting(tmpdir):
 
     # fit model
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         enable_progress_bar=False,
         max_epochs=2,
@@ -259,6 +262,7 @@ def test_running_test_no_val(tmpdir):
 
     # fit model
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         enable_progress_bar=False,
         max_epochs=1,
@@ -283,7 +287,9 @@ def test_simple_cpu(tmpdir):
     model = BoringModel()
 
     # fit model
-    trainer = Trainer(default_root_dir=tmpdir, max_epochs=1, limit_val_batches=0.1, limit_train_batches=20)
+    trainer = Trainer(
+        accelerator="auto", default_root_dir=tmpdir, max_epochs=1, limit_val_batches=0.1, limit_train_batches=20
+    )
     trainer.fit(model)
 
     # traning complete

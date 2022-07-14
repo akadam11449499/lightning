@@ -268,6 +268,7 @@ def test_tensorboard_with_accummulated_gradients(mock_log_metrics, tmpdir):
     model.training_epoch_end = None
     logger_0 = TensorBoardLogger(tmpdir, default_hp_metric=False)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         limit_train_batches=12,
         limit_val_batches=0,

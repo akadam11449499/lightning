@@ -108,6 +108,7 @@ def test_model_properties_fit_ckpt_path(tmpdir):
     model = BoringModel()
     checkpoint_callback = ModelCheckpoint(dirpath=tmpdir, save_last=True)
     trainer_args = dict(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_train_batches=2,
@@ -137,6 +138,7 @@ def test_trainer_properties_restore_ckpt_path(tmpdir):
     dm = ClassifDataModule()
     checkpoint_callback = ModelCheckpoint(dirpath=tmpdir, save_last=True)
     trainer_args = dict(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_train_batches=2,
@@ -226,7 +228,11 @@ def test_correct_step_and_epoch(tmpdir):
     first_max_epochs = 2
     train_batches = 2
     trainer = Trainer(
-        default_root_dir=tmpdir, max_epochs=first_max_epochs, limit_train_batches=train_batches, limit_val_batches=0
+        accelerator="auto",
+        default_root_dir=tmpdir,
+        max_epochs=first_max_epochs,
+        limit_train_batches=train_batches,
+        limit_val_batches=0,
     )
     assert trainer.current_epoch == 0
     assert trainer.global_step == 0
@@ -245,7 +251,11 @@ def test_correct_step_and_epoch(tmpdir):
 
     max_epochs = first_max_epochs + 2
     trainer = Trainer(
-        default_root_dir=tmpdir, max_epochs=max_epochs, limit_train_batches=train_batches, limit_val_batches=0
+        accelerator="auto",
+        default_root_dir=tmpdir,
+        max_epochs=max_epochs,
+        limit_train_batches=train_batches,
+        limit_val_batches=0,
     )
     # the ckpt state is not loaded at this point
     assert trainer.current_epoch == 0
@@ -270,6 +280,7 @@ def test_fit_twice(tmpdir):
             epochs.append(self.current_epoch)
 
     trainer = Trainer(
+        accelerator="auto",
         max_epochs=2,
         limit_train_batches=1,
         limit_val_batches=1,
@@ -288,7 +299,7 @@ def test_fit_twice(tmpdir):
 def test_try_resume_from_non_existing_checkpoint(tmpdir):
     """Test that trying to resume from non-existing `ckpt_path` fails with an error."""
     model = BoringModel()
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
 
     with pytest.raises(FileNotFoundError, match="Aborting training"):
         trainer.fit(model, ckpt_path=str(tmpdir / "non_existing.ckpt"))
@@ -637,6 +648,7 @@ def test_model_saving_loading(tmpdir):
 
     # fit model
     trainer = Trainer(
+        accelerator="auto",
         max_epochs=1,
         limit_train_batches=2,
         limit_val_batches=2,
@@ -691,6 +703,7 @@ def test_strict_model_load_more_params(monkeypatch, tmpdir, tmpdir_server, url_c
 
     # fit model
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_train_batches=2,
@@ -731,6 +744,7 @@ def test_strict_model_load_less_params(monkeypatch, tmpdir, tmpdir_server, url_c
 
     # fit model
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_train_batches=2,

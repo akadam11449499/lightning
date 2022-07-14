@@ -852,7 +852,7 @@ def test_lightning_cli_trainer_fn(fn):
 
 def test_lightning_cli_subcommands():
     subcommands = LightningCLI.subcommands()
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     for subcommand, exclude in subcommands.items():
         fn = getattr(trainer, subcommand)
         parameters = list(inspect.signature(fn).parameters)

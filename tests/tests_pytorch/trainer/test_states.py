@@ -20,7 +20,7 @@ from pytorch_lightning.trainer.states import RunningStage, TrainerFn, TrainerSta
 
 def test_initialize_state():
     """Tests that state is INITIALIZING after Trainer creation."""
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     assert trainer.state == TrainerState(status=TrainerStatus.INITIALIZING, fn=None, stage=None)
 
 

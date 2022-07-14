@@ -221,6 +221,7 @@ def test_adding_step_key(tmpdir):
 
     model = CustomModel()
     trainer = Trainer(
+        accelerator="auto",
         max_epochs=3,
         logger=CustomTensorBoardLogger(save_dir=tmpdir),
         default_root_dir=tmpdir,
@@ -321,7 +322,12 @@ def test_log_hyperparams_being_called(log_hyperparams_mock, tmpdir, logger):
 
     model = TestModel("pytorch", "lightning")
     trainer = Trainer(
-        default_root_dir=tmpdir, max_epochs=1, limit_train_batches=0.1, limit_val_batches=0.1, num_sanity_val_steps=0
+        accelerator="auto",
+        default_root_dir=tmpdir,
+        max_epochs=1,
+        limit_train_batches=0.1,
+        limit_val_batches=0.1,
+        num_sanity_val_steps=0,
     )
     trainer.fit(model)
 
@@ -351,6 +357,7 @@ def test_log_hyperparams_key_collision(log_hyperparams_mock, tmpdir):
     dm = TestDataModule(same_params)
 
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_train_batches=0.1,
@@ -375,6 +382,7 @@ def test_log_hyperparams_key_collision(log_hyperparams_mock, tmpdir):
     model = TestModel(same_params)
     dm = TestDataModule(diff_params)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_train_batches=0.1,
@@ -392,6 +400,7 @@ def test_log_hyperparams_key_collision(log_hyperparams_mock, tmpdir):
     model = TestModel(same_params)
     dm = TestDataModule(tensor_params)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=1,
         limit_train_batches=0.1,

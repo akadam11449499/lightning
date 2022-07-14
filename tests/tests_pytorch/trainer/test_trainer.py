@@ -328,7 +328,7 @@ def test_model_checkpoint_options(tmpdir, save_top_k, save_last, expected_files)
         save_last=save_last,
         verbose=True,
     )
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     trainer.state.fn = TrainerFn.FITTING
     trainer.save_checkpoint = mock_save_function
 
@@ -1745,7 +1745,7 @@ def test_module_current_fx_attributes_reset(tmpdir):
 
 
 def test_exception_when_lightning_module_is_not_set_on_trainer():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
 
     with pytest.raises(MisconfigurationException, match=r"`model` must be provided.*validate"):
         trainer.validate()
@@ -2159,7 +2159,7 @@ def test_trainer_config_device_ids(monkeypatch, trainer_kwargs, expected_device_
 
 
 def test_trainer_save_checkpoint_no_model_attached():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     assert trainer.model is None
     with pytest.raises(AttributeError, match="Saving a checkpoint is only possible if a model is attached"):
         trainer.save_checkpoint("checkpoint.ckpt")

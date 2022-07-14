@@ -19,7 +19,7 @@ from pytorch_lightning import Trainer
 
 def test_passing_no_env_variables():
     """Testing overwriting trainer arguments."""
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     assert trainer.logger is not None
     assert trainer.max_steps == -1
     assert trainer.max_epochs == 1000
@@ -32,7 +32,7 @@ def test_passing_no_env_variables():
 @mock.patch.dict(os.environ, {"PL_TRAINER_LOGGER": "False", "PL_TRAINER_MAX_STEPS": "7"})
 def test_passing_env_variables_only():
     """Testing overwriting trainer arguments."""
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     assert trainer.logger is None
     assert trainer.max_steps == 7
 

@@ -249,6 +249,7 @@ def test_swa_multiple_lrs(tmpdir):
     model = TestModel()
     swa_callback = StochasticWeightAveraging(swa_lrs=swa_lrs)
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         callbacks=swa_callback,
         fast_dev_run=1,

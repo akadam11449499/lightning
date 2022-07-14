@@ -400,7 +400,7 @@ def test_error_raised_with_float_limited_eval_batches():
     ],
 )
 def test_non_sequential_sampler_warning_is_raised_for_eval_dataloader(val_dl, warns):
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
     model = BoringModel()
     trainer._data_connector.attach_data(model, val_dataloaders=val_dl)
     context = pytest.warns if warns else no_warning_call
@@ -445,7 +445,7 @@ def test_dataloader_source_direct_access():
 def test_dataloader_source_request_from_module():
     """Test requesting a dataloader from a module works."""
     module = BoringModel()
-    module.trainer = Trainer()
+    module.trainer = Trainer(accelerator="auto")
     module.foo = Mock(return_value=module.train_dataloader())
 
     source = _DataLoaderSource(module, "foo")

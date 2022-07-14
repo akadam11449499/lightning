@@ -152,6 +152,7 @@ def test_timer_resume_training(tmpdir):
 
     # initial training
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         max_epochs=100,
         callbacks=[timer, checkpoint_callback],

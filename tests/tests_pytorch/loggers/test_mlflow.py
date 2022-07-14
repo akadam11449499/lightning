@@ -187,6 +187,7 @@ def test_mlflow_logger_dirs_creation(tmpdir):
     model = CustomModel()
     limit_batches = 5
     trainer = Trainer(
+        accelerator="auto",
         default_root_dir=tmpdir,
         logger=logger,
         max_epochs=1,

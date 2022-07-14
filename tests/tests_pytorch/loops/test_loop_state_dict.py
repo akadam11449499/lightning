@@ -23,7 +23,7 @@ from pytorch_lightning.utilities.exceptions import MisconfigurationException
 
 
 def test_loops_state_dict():
-    trainer = Trainer()
+    trainer = Trainer(accelerator="auto")
 
     fit_loop = FitLoop()
     with pytest.raises(MisconfigurationException, match="Loop FitLoop should be connected to a"):
